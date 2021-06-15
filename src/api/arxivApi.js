@@ -1,6 +1,23 @@
 import {parseString} from "xml2js";
 import {ERROR_CODES, KEYWORD_SEARCH} from "../Globals"
 
+const callArxivEndpoint = (url, setResults, errorCode) => {
+    fetch(url, {
+        method: 'GET',
+    }).then(
+        response => response.text()
+    ).then(str => {
+        parseString(str, (err, result) => {
+            if (result && result.feed && result.feed.entry) {
+                console.log('entries found ', result.feed.entry)
+                setResults(result.feed.entry)
+            }
+        })
+    }).catch(err => {
+        setResults(errorCode)
+    })
+}
+
 export function getArticleList(setListOfArticles, filters) {
     if (!filters) {
         setListOfArticles([])
@@ -9,28 +26,42 @@ export function getArticleList(setListOfArticles, filters) {
 
     let formatFilterString = ''
     let prefix = ''
-    console.log('filters', filters)
+    // console.log('filters', filters)
     filters.forEach(ele => {
         formatFilterString += `${prefix}all:${encodeURIComponent(KEYWORD_SEARCH[ele])}`
         prefix = "+AND+"
     })
 
+    let mostRecentOrdering = "&sortBy=submittedDate&sortOrder=descending"
+    let offset = "&start=0&max_results=10"
+
     console.log('formatFilterString', formatFilterString)
 
     // function to fetch via GET a list of the articles to show on the frontend
-    fetch(`http://export.arxiv.org/api/query?search_query=${formatFilterString}&start=0&max_results=10`, {
-        method: 'GET',
-    }).then(
-        response => response.text()
-    ).then(str => {
-        parseString(str, (err, result) => {
-            if (result && result.feed && result.feed.entry) {
-                console.log('entries found ', result.feed.entry)
-                setListOfArticles(result.feed.entry)
-            }
-        })
-    }).catch(err => {
-        setListOfArticles(ERROR_CODES.ERROR_GETTING_ARTICLES)
-    })
+    callArxivEndpoint(
+        `http://export.arxiv.org/api/query?search_query=${formatFilterString}${mostRecentOrdering}${offset}`,
+        setListOfArticles,
+        ERROR_CODES.ERROR_GETTING_ARTICLES,
+    )
 }
+
+export function getArticlesGivenAuthor(setListOfArticles, author) {
+    if (!author) {
+        setListOfArticles([])
+        return
+    }
+    let authorQuery = `au:${encodeURIComponent(author)}`
+    let mostRecentOrdering = "&sortBy=submittedDate&sortOrder=descending"
+    let offset = "&start=0&max_results=10"
+
+    // function to fetch via GET a list of the articles to show on the frontend
+    callArxivEndpoint(
+        `http://export.arxiv.org/api/query?search_query=${authorQuery}${mostRecentOrdering}${offset}`,
+        setListOfArticles,
+        ERROR_CODES.ERROR_GETTING_ARTICLES_GIVEN_AUTHOR,
+    )
+}
+
+
+
 

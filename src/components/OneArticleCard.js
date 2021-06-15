@@ -1,17 +1,27 @@
 import React from "react";
 import "../App.css"
+import {useHistory} from "react-router-dom";
 
 export default function OneArticleCard({oneArticleItem}) {
+    const history = useHistory()
 
     const renderAuthors = () => {
         if (oneArticleItem?.author?.length) {
-            let authors = ""
             let prefix = ""
-            oneArticleItem.author.map((ele) => {
-                authors += prefix + ele?.name?.length? ele.name[0] : ""
-                prefix = ", "
-            })
-            return authors
+            return (
+                <>
+                    {oneArticleItem.author.map((ele, ind) => {
+                        let spacer = ind < oneArticleItem.author.length - 1? <>,&nbsp;</> : null
+                        let authorName = ele?.name?.length? ele.name[0] : ""
+                        return (
+                            <>
+                                <a href={`/author/?name=${encodeURIComponent(authorName)}`}>{prefix + authorName}</a>
+                                {spacer}
+                            </>
+                        )
+                    })}
+                </>
+            )
         }
         return ""
     }
@@ -26,7 +36,18 @@ export default function OneArticleCard({oneArticleItem}) {
 
 
     return (
-        <div className="one-article-card box-hover-shadow">
+        <div
+            onClick={() => {
+                let thisArticleId = oneArticleItem?.id?.length? oneArticleItem.id[0] : null
+                if (thisArticleId) {
+                    let urlList = thisArticleId.split('/')
+                    history.push(`/article/?id=${urlList[urlList.length - 1]}`)
+                } else {
+                    alert("No Article ID was found, cannot show full details")
+                }
+                
+            }}
+            className="one-article-card box-hover-shadow">
             <h4>{oneArticleItem?.title?.length? oneArticleItem.title[0] : "No title Found"}</h4>
             <div className="article-row hide-overflow-text">
                 <h5>Published: {getPrettyDate()} | {renderAuthors()}</h5>
