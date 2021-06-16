@@ -25,7 +25,7 @@ export default function AllArticles() {
     const listOfArticlesFound = () => {
         if (listOfArticles && listOfArticles.length) {
             return (
-                <div className="list-of-found-articles border">
+                <div className="list-of-found-articles">
                     {listOfArticles.map((ele, ind) => {
                         return <OneArticleCard oneArticleItem={ele} key={`article_item_${ind}`}/>
                     })}

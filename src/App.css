@@ -45,8 +45,25 @@ p,h1,h2,h3,h4,h5,h6 {
   display: flex;
 }
 
+.header {
+  /*position: absolute;*/
+  width: 100vw;
+  height: 5vh;
+  top: 0;
+  left: 0;
+  padding: .5rem;
+  display: flex;
+}
+
+.bottom-border-drop-shadow {
+  border: 1px solid #20202030;
+  -webkit-box-shadow: 0px 4px 3px rgba(50, 50, 50, 0.3);
+  -moz-box-shadow: 0px 4px 3px rgba(50, 50, 50, 0.3);
+  box-shadow: 0px 4px 3px rgba(50, 50, 50, 0.3);
+}
+
 .one-article-card {
-  height: 20vh;;
+  height: 24vh;
   width: 50rem;
   border-radius: 1rem;
   background-color: var(--color-white);

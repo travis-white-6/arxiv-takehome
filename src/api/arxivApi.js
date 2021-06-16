@@ -33,7 +33,7 @@ export function getArticleList(setListOfArticles, filters) {
     })
 
     let mostRecentOrdering = "&sortBy=submittedDate&sortOrder=descending"
-    let offset = "&start=0&max_results=10"
+    let offset = "&start=0&max_results=30"
 
     console.log('formatFilterString', formatFilterString)
 
@@ -52,13 +52,37 @@ export function getArticlesGivenAuthor(setListOfArticles, author) {
     }
     let authorQuery = `au:${encodeURIComponent(author)}`
     let mostRecentOrdering = "&sortBy=submittedDate&sortOrder=descending"
-    let offset = "&start=0&max_results=10"
+    let offset = "&start=0&max_results=30"
 
     // function to fetch via GET a list of the articles to show on the frontend
     callArxivEndpoint(
         `http://export.arxiv.org/api/query?search_query=${authorQuery}${mostRecentOrdering}${offset}`,
         setListOfArticles,
         ERROR_CODES.ERROR_GETTING_ARTICLES_GIVEN_AUTHOR,
+    )
+}
+
+export function getOneArticleGivenId(setArticle, articleId) {
+    if (!articleId) {
+        setArticle([{}])
+        return
+    }
+
+    // function to fetch via GET a list of the articles to show on the frontend
+    callArxivEndpoint(
+        `http://export.arxiv.org/api/query?id_list=${articleId}`,
+        setArticle,
+        ERROR_CODES.ERROR_GETTING_ARTICLE_BY_ID,
+    )
+}
+
+export function getListOfAuthors(serAuthorList) {
+
+    // function to fetch via GET a list of the articles to show on the frontend
+    callArxivEndpoint(
+        `http://export.arxiv.org/api/query?id_list=`,
+        serAuthorList,
+        ERROR_CODES.ERROR_GETTING_LIST_OF_AUTHORS,
     )
 }
 
