@@ -4,9 +4,7 @@ import {KEYWORD_SEARCH} from "../Globals"
 
 import Button from '@material-ui/core/Button';
 
-export default function FilterContainer({setFilters, filters, setFetchNew}) {
-
-
+export default function FilterContainer({setFilters, filters, setFetchNew, setListOfArticles, setOffsetScroll}) {
 
     return (
         <div>
@@ -17,6 +15,8 @@ export default function FilterContainer({setFilters, filters, setFetchNew}) {
                         <Button
                             key={`filter_button_${ind}`}
                             onClick={() => {
+                                setOffsetScroll(0)
+                                setListOfArticles([])
                                 let tempFilters = [...filters]
                                 if (tempFilters.includes(ele)) {
                                     tempFilters.splice(tempFilters.indexOf(ele), 1)
@@ -28,7 +28,7 @@ export default function FilterContainer({setFilters, filters, setFetchNew}) {
                             }}
                             style={{marginRight: '1rem'}}
                             color="primary"
-                            variant={filters.includes(ele) ? "contained" : "outlined"}>
+                            variant={filters.includes(ele) ? "contained" : "text"}>
                             {KEYWORD_SEARCH[ele]}
                         </Button>
                     )

@@ -5,6 +5,7 @@ import {getArticleList} from "../api/arxivApi"
 import OneArticleCard from "../components/OneArticleCard";
 import FilterContainer from "../components/FilterContainer"
 import {KEYWORD_SEARCH} from "../Globals";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export default function AllArticles() {
 
@@ -12,23 +13,42 @@ export default function AllArticles() {
     const [filters, setFilters] = useState([Object.keys(KEYWORD_SEARCH)[0]])
     const [fetchNew, setFetchNew] = useState(false)
 
+    const [offsetScroll, setOffsetScroll] = useState(0)
+
     useEffect(() => {
         if (listOfArticles == null || fetchNew) {
             setFetchNew(false)
-            console.log('called func')
-            getArticleList(setListOfArticles, filters)
+            // only needed for initial load
+            let thisList = listOfArticles? listOfArticles : []
+            getArticleList(thisList, setListOfArticles, filters, offsetScroll, setOffsetScroll)
         }
 
     }, [listOfArticles, filters, fetchNew])
 
+    const fetchMoreData = () => {
+        setFetchNew(true)
+    }
 
     const listOfArticlesFound = () => {
         if (listOfArticles && listOfArticles.length) {
             return (
                 <div className="list-of-found-articles">
-                    {listOfArticles.map((ele, ind) => {
-                        return <OneArticleCard oneArticleItem={ele} key={`article_item_${ind}`}/>
-                    })}
+                    <InfiniteScroll
+                        height={'70vh'}
+                        dataLength={listOfArticles.length} //This is important field to render the next data
+                        next={fetchMoreData}
+                        hasMore={true}
+                        endMessage={
+                            <p style={{ textAlign: 'center' }}>
+                                <b>No more articles to show</b>
+                            </p>
+                        }>
+
+                        {listOfArticles.map((ele, ind) => {
+                            return <OneArticleCard oneArticleItem={ele} key={`article_item_${ind}`}/>
+                        })}
+
+                    </InfiniteScroll>
                 </div>
             )
         }
@@ -36,7 +56,12 @@ export default function AllArticles() {
 
     return (
         <div className="all-article-container app-padding">
-            <FilterContainer filters={filters} setFilters={setFilters} setFetchNew={setFetchNew}/>
+            <FilterContainer
+                setOffsetScroll={setOffsetScroll}
+                setListOfArticles={setListOfArticles}
+                filters={filters}
+                setFilters={setFilters}
+                setFetchNew={setFetchNew}/>
             {listOfArticlesFound()}
         </div>
     )

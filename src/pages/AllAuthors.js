@@ -5,8 +5,8 @@ export default function AllAuthors() {
 
 
     return (
-        <div>
-            <p>all authors list</p>
+        <div className="app-padding">
+            <p>All authors list unimplemented</p>
         </div>
     )
 }

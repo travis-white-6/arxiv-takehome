@@ -8,6 +8,7 @@ import AllAuthors from "../pages/AllAuthors"
 import Header from "../components/Header";
 
 export default function NavigationRouter() {
+    // Navigation Router to handle the different pages
 
     return (
         <BrowserRouter>

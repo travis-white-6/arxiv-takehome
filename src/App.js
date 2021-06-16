@@ -3,7 +3,6 @@ import './App.css';
 
 import NavigationRouter from "./navigation/NavigationRouter";
 import RequiredFooter from "./components/RequiredFooter"
-import Header from "./components/Header"
 
 function App() {
     return (
