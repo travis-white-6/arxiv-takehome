@@ -13,9 +13,9 @@ HOW TO RUN
 
 The app is live to play with at the url https://arxiv-new-ui.web.app/
 
-In order to run locally, you can close the repo and install requirements from the package.json file. You can use `npm install` to do this. Then start the react app using `npm run`
+In order to run locally, you can clone the repo and install requirements from the package.json file. You can use `npm install` to do this. Then start the react app using `npm run`
 
-There are a few unit tests, by no means an extensive suite. I ran short on time and did not implement as many as I would have liked. To run the React logic and component unit tests run `npm run screen_test`. The mocha tests meant to test helpers / API were not implemented.
+There are a few unit tests, but by no means an extensive suite. I ran short on time and did not implement as many as I would have liked. To run the React logic and component unit tests run `npm run screen_test`. The mocha tests meant to test helpers / API were not implemented.
 
 
 KEY DESIGN DECISIONS
